@@ -1,15 +1,17 @@
 pipeline {
     agent any
 
-    environment {
-        KUBECONFIG = credentials('kubeconfig-id')
-    }
-
     stages {
 
         stage('Checkout Code') {
             steps {
-                git url: 'https://github.com/akash5252/prometheus-cicd.git', branch: 'main'
+                git url: 'https://github.com/akash5252/prometheus-cicd.git'
+            }
+        }
+
+        stage('Verify Cluster') {
+            steps {
+                sh 'kubectl get nodes'
             }
         }
 
@@ -22,15 +24,16 @@ pipeline {
             }
         }
 
-        stage('Deploy Prometheus Stack') {
+        stage('Deploy Prometheus') {
             steps {
                 sh '''
+                kubectl create namespace monitoring || true
+
                 helm upgrade --install prometheus prometheus-community/kube-prometheus-stack \
-                -n monitoring --create-namespace \
+                -n monitoring \
                 -f values.yaml
                 '''
             }
         }
-
     }
 }
