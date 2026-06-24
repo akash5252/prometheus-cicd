@@ -1,1 +1,9 @@
+grafana:
+  enabled: true
 
+alertmanager:
+  enabled: false
+
+prometheus:
+  prometheusSpec:
+    retention: 2d
