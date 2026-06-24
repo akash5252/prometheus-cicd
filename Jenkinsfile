@@ -3,12 +3,6 @@ pipeline {
 
     stages {
 
-        stage('Checkout Code') {
-            steps {
-                git url: 'https://github.com/akash5252/prometheus-cicd.git'
-            }
-        }
-
         stage('Verify Cluster') {
             steps {
                 sh 'kubectl get nodes'
